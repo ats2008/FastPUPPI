@@ -10,7 +10,7 @@ process.load('SimGeneral.MixingModule.mixNoPU_cfi')
 process.load('Configuration.StandardSequences.EndOfProcess_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 from Configuration.AlCa.GlobalTag import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, '140X_mcRun4_realistic_v4', '')
+process.GlobalTag = GlobalTag(process.GlobalTag, '141X_mcRun4_realistic_v3', '')
 
 process.load('SimCalorimetry.HcalTrigPrimProducers.hcaltpdigi_cff')
 process.load('CalibCalorimetry.CaloTPG.CaloTPGTranscoder_cfi')
@@ -38,7 +38,7 @@ process.source = cms.Source("PoolSource",
         'drop triggerTriggerFilterObjectWithRefs_*_*_HLT'
     ),
 )
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(200))
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(20))
 process.options = cms.untracked.PSet(
         wantSummary = cms.untracked.bool(True),
         #numberOfThreads = cms.untracked.uint32(4),
@@ -48,16 +48,16 @@ process.options = cms.untracked.PSet(
 process.PFInputsTask = cms.Task(
     process.L1TLayer1TaskInputsTask,
     process.L1THGCalTriggerPrimitivesTask,
-   #process.TTClustersFromPhase2TrackerDigis,
-   #process.TTStubsFromPhase2TrackerDigis,
-   #process.TrackerDTCProducer,
-   #process.offlineBeamSpot,
-   #process.l1tTTTracksFromTrackletEmulation,
-   #process.l1tTTTracksFromExtendedTrackletEmulation,
-   #process.TTTrackAssociatorFromPixelDigis,
-   #process.TTTrackAssociatorFromPixelDigisExtended,
-   #process.SimL1EmulatorTask
-   #process.l1tTkStubsGmt,
+    process.TTClustersFromPhase2TrackerDigis,
+    process.TTStubsFromPhase2TrackerDigis,
+    process.TrackerDTCProducer,
+    #process.offlineBeamSpot,
+    process.l1tTTTracksFromTrackletEmulation,
+    process.l1tTTTracksFromExtendedTrackletEmulation,
+    process.TTTrackAssociatorFromPixelDigis,
+    process.TTTrackAssociatorFromPixelDigisExtended,
+    process.SimL1EmulatorTask,
+#    process.l1tTkStubsGmt,
 )
 process.p = cms.Path(
         process.l1tLayer1 +
