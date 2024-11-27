@@ -147,6 +147,13 @@ process.l1pfjetTable = cms.EDProducer("L1PFJetTableProducer",
     ),
 )
 
+
+process.l1HFTowerTable = cms.EDProducer("L1HFTowerTableProducer",
+    hcalDigis=cms.InputTag("simHcalTriggerPrimitiveDigis","","HLT")
+)
+
+
+
 process.l1pfmetTable = cms.EDProducer("L1PFMetTableProducer",
     genMet = cms.InputTag("genMetTrue"), 
     flavour = cms.string(""),
@@ -165,7 +172,7 @@ monitorPerf("L1Puppi", "l1tLayer1:Puppi")
 process.p = cms.Path(
         process.ntuple + #process.content +
         process.l1pfjetTable + 
-        process.l1pfmetTable + process.l1pfmetCentralTable
+        process.l1pfmetTable + process.l1pfmetCentralTable+process.l1HFTowerTable
         )
 process.p.associate(process.extraPFStuff)
 process.TFileService = cms.Service("TFileService", fileName = cms.string("perfTuple.root"))
@@ -394,7 +401,7 @@ def addGenLep(pdgs=[11,13,22]):
 
 def addStaMu():
     process.staMuTable = cms.EDProducer("SimpleCandidateFlatTableProducer",
-                        src = cms.InputTag('l1tSAMuonsGmt','promptSAMuons'),
+                        src = cms.InputTag('l1','promptSAMuons'),
                         cut = cms.string(""),
                         name = cms.string("StaMu"),
                         doc = cms.string("reco leptons"),
@@ -409,6 +416,25 @@ def addStaMu():
                         )
     )
     process.extraPFStuff.add(process.staMuTable)
+
+#def addStaMu():
+#    process.staMuTable = cms.EDProducer("SimpleCandidateFlatTableProducer",
+#                        src = cms.InputTag('l1tSAMuonsGmt','promptSAMuons'),
+#                        cut = cms.string(""),
+#                        name = cms.string("StaMu"),
+#                        doc = cms.string("reco leptons"),
+#                        singleton = cms.bool(False), # the number of entries is variable
+#                        extension = cms.bool(False), # this is the main table
+#                        variables = cms.PSet(
+#                            pt  = Var("pt",  float,precision=8),
+#                            phi = Var("phi", float,precision=8),
+#                            eta  = Var("eta", float,precision=8),
+#                            charge  = Var("charge", int, doc="charge id"),
+#                            quality  = LazyVar("hwQual", int, doc="charge id"),
+#                        )
+#    )
+#    process.extraPFStuff.add(process.staMuTable)
+
 
 
 def addHGCalTPs():
@@ -774,3 +800,6 @@ def saveGenCands():
                                            ),
                                       )
     process.p += process.gencandTable
+process.source.fileNames  = ['file:/eos/cms/store/cmst3/group/l1tr/FastPUPPI/14_2_X/fpinputs_140X/v0/DoubleElectron_FlatPt-1To100_PU200/inputs140X_1.root'] 
+process.source.fileNames  = ['file:/eos/cms/store/cmst3/group/l1tr/FastPUPPI/14_0_X/fpinputs_131X/v9a/VBFHtt_PU200/inputs131X_294.root'] 
+
